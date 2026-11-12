@@ -58,11 +58,11 @@ jobs:
         with:
           gradle-version: '8.9'
 
-      - name: Bygg (assembleDebug)
+      - name: Bygg (assembleRelease)
         working-directory: ${{ steps.src.outputs.root }}
         run: |
           set -o pipefail
-          gradle assembleDebug --stacktrace 2>&1 | tee "$GITHUB_WORKSPACE/bygglogg.txt"
+          gradle assembleRelease --stacktrace 2>&1 | tee "$GITHUB_WORKSPACE/bygglogg.txt"
 
       - name: Spara bygglogg vid fel
         if: failure()
@@ -73,7 +73,7 @@ jobs:
 
       - name: Döp om APK
         run: |
-          APK=$(find "${{ steps.src.outputs.root }}" -path '*build/outputs/apk/debug/*.apk' | head -1)
+          APK=$(find "${{ steps.src.outputs.root }}" -path '*build/outputs/apk/release/*.apk' | head -1)
           if [ -z "$APK" ]; then echo "::error::Ingen APK hittades"; exit 1; fi
           cp "$APK" Fotobacken.apk
 
